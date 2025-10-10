@@ -1,9 +1,9 @@
 // routes/userRoutes.js
 import express from 'express';
 const router = express.Router();
-import authenticate from '../middleware/authenticate.js';
+import authenticate from '../middleware/authMiddleware.js';
 import authorize from '../middleware/authorize.js';
-import userController from '../controllers/userController.js';
+import userController from '../controllers/adminController.js';
 
 // All authenticated users (admin, user, employee) can get their own profile
 router.get('/profile', authenticate, userController.getProfile);
