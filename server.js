@@ -11,10 +11,6 @@ import iotRoutes from './routes/iotRoutes.js';
 
 // Load environment variables
 dotenv.config();
-
-// Connect to Database
-connectDB();
-
 const app = express();
 
 // Middleware
@@ -23,6 +19,10 @@ app.use(express.json()); // Allows parsing of JSON data in the request body
 
 // --- Route Definitions ---
 // 1. Auth & Profile Routes
+app.get('/api/test/entry' ,(req,res)=>{
+    res.send('mona bambuwakda wada karapanko')
+})
+app.get('/api/test', (req, res) => res.send('ok'));
 app.use('/api/auth', authRoutes);
 
 // // 2. Admin Routes
@@ -43,6 +43,8 @@ app.use('/api/iot', iotRoutes);
 // app.use(errorHandler);
 
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5060;
 
-app.listen(PORT, () => console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running in port ${PORT}`));
+// Connect to Database
+connectDB();

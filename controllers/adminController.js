@@ -4,6 +4,7 @@ import { User } from '../models/userModel.js';
 import { Route } from '../models/routeModels.js';
 import Wastebin from '../models/wastebinModel.js';
 import { AccountStatusEnum } from '../models/enums.js';
+import PickupRequest from '../models/pickupRequestModel.js';
 
 // @desc    Get all Users (Admin view)
 // @route   GET /api/admin/users
@@ -107,9 +108,45 @@ const getWasteLevelReport = asyncHandler(async (req, res) => {
     res.json(report);
 });
 
+// @desc    Get all special pickup requests
+// @route   GET /api/admin/pickup-requests
+// @access  Private/Admin
+const getAllPickupRequests = asyncHandler(async (req, res) => {
+    const requests = await PickupRequest.find()
+        .populate('resident', 'name email address')
+        .populate('assignedCrew', 'name email')
+        .sort({ scheduledDate: -1 });
+    res.json(requests);
+});
+
+// @desc    Update pickup request status and assign crew
+// @route   PUT /api/admin/pickup-requests/:id
+// @access  Private/Admin
+const updatePickupRequest = asyncHandler(async (req, res) => {
+    const { status, assignedCrewId } = req.body;
+    const request = await PickupRequest.findById(req.params.id);
+
+    if (!request) {
+        res.status(404);
+        throw new Error('Pickup request not found');
+    }
+
+    if (status) request.status = status;
+    if (assignedCrewId) request.assignedCrew = assignedCrewId;
+
+    await request.save();
+
+    res.json({
+        message: 'Pickup request updated',
+        request
+    });
+});
+
 export { 
     getUsers, 
     updateUserStatus, 
     createRoute, 
-    getWasteLevelReport 
+    getWasteLevelReport,
+    getAllPickupRequests,
+    updatePickupRequest
 };

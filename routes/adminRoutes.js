@@ -4,7 +4,9 @@ import {
     getUsers, 
     updateUserStatus, 
     createRoute, 
-    getWasteLevelReport 
+    getWasteLevelReport,
+    getAllPickupRequests,
+    updatePickupRequest
 } from '../controllers/adminController.js';
 
 const router = express.Router();
@@ -34,5 +36,16 @@ router.route('/routes')
 // @desc  Get aggregated data on bin fill levels
 router.route('/reports/waste-levels')
     .get(adminProtect, getWasteLevelReport); 
+
+// --- Special Pickup Requests Management ---
+// @route GET /api/admin/pickup-requests
+// @desc  Get list of all special pickup requests
+router.route('/pickup-requests')
+    .get(adminProtect, getAllPickupRequests);
+
+// @route PUT /api/admin/pickup-requests/:id
+// @desc  Update a special pickup request
+router.route('/pickup-requests/:id')
+    .put(adminProtect, updatePickupRequest);
 
 export default router;

@@ -85,9 +85,12 @@ const CollectionCrewMember = User.discriminator('CollectionCrewMember', new Sche
         type: String 
     },
     vehicle: { 
-        type: Schema.Types.ObjectId, 
-        ref: 'Vehicle', // Assumes a Vehicle model will be created later
+        type: String ,
         required: false // Can be assigned later
+    },
+    address: { 
+        type: String ,
+        required: true 
     }
 }));
 

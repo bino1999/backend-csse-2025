@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 // --- Routestop Schema ---
 // Routestop is used to define the sequence of collection points for a Route
@@ -56,4 +56,5 @@ const routeSchema = new mongoose.Schema({
 });
 
 const Route = mongoose.model('Route', routeSchema);
-module.exports = { Route, Routestop };
+
+export { Route, Routestop };

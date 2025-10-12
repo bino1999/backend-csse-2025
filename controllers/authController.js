@@ -1,5 +1,5 @@
 import asyncHandler from 'express-async-handler';
-import { Resident, User } from '../models/userModel.js';
+import { User, Administrator, Resident, CollectionCrewMember } from '../models/userModel.js';
 import generateToken from '../utils/generateToken.js';
 import crypto from 'crypto'; 
 
@@ -44,6 +44,74 @@ const registerResident = asyncHandler(async (req, res) => {
     }
 });
 
+// @desc    Register a new Administrator
+// @route   POST /api/auth/register-admin
+// @access  Public (should be restricted in production)
+const registerAdmin = asyncHandler(async (req, res) => {
+    const { name, email, password, department } = req.body;
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+        res.status(400);
+        throw new Error('User already exists');
+    }
+    const userId = `ADM-${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
+    const admin = await Administrator.create({
+        userId,
+        name,
+        email,
+        password,
+        department,
+        role: 'Administrator'
+    });
+    if (admin) {
+        res.status(201).json({
+            _id: admin._id,
+            name: admin.name,
+            email: admin.email,
+            role: admin.role,
+            token: generateToken(admin._id),
+        });
+    } else {
+        res.status(400);
+        throw new Error('Invalid admin data');
+    }
+});
+
+// @desc    Register a new Collection Crew Member
+// @route   POST /api/auth/register-crew
+// @access  Public (should be restricted in production)
+const registerCrewMember = asyncHandler(async (req, res) => {
+    const { name, email, password, employeeId, contactNumber, vehicle } = req.body;
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+        res.status(400);
+        throw new Error('User already exists');
+    }
+    const userId = `CREW-${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
+    const crew = await CollectionCrewMember.create({
+        userId,
+        name,
+        email,
+        password,
+        employeeId,
+        contactNumber,
+        vehicle,
+        role: 'CollectionCrewMember'
+    });
+    if (crew) {
+        res.status(201).json({
+            _id: crew._id,
+            name: crew.name,
+            email: crew.email,
+            role: crew.role,
+            token: generateToken(crew._id),
+        });
+    } else {
+        res.status(400);
+        throw new Error('Invalid crew member data');
+    }
+});
+
 // @desc    Authenticate User (Login)
 // @route   POST /api/auth/login
 // @access  Public
@@ -83,4 +151,4 @@ const getUserProfile = asyncHandler(async (req, res) => {
 });
 
 
-export { registerResident, authUser, getUserProfile };
+export { registerResident, registerAdmin, registerCrewMember, authUser, getUserProfile };
