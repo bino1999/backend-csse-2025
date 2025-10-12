@@ -4,6 +4,11 @@ import {
     getCurrentRoute, 
     recordCollection 
 } from '../controllers/crewController.js';
+import { 
+    getAssignedPickups, 
+    startPickup, 
+    completePickup 
+} from '../controllers/crewPickupController.js';
 
 const router = express.Router();
 
@@ -21,5 +26,21 @@ router.route('/route/current')
 // @desc  Record a collection event by scanning the bin tag (Sets fillLevel=0)
 router.route('/collection/:binTag')
     .put(crewProtect, recordCollection); 
+
+// --- Pickup Requests Management ---
+// @route GET /api/crew/pickup-requests
+// @desc  Get assigned pickup requests for the crew member
+router.route('/pickup-requests')
+    .get(crewProtect, getAssignedPickups);
+
+// @route PUT /api/crew/pickup-requests/:id/start
+// @desc  Start a pickup request by ID
+router.route('/pickup-requests/:id/start')
+    .put(crewProtect, startPickup);
+
+// @route PUT /api/crew/pickup-requests/:id/complete
+// @desc  Complete a pickup request by ID
+router.route('/pickup-requests/:id/complete')
+    .put(crewProtect, completePickup);
 
 export default router;

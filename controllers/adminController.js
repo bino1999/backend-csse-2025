@@ -1,6 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import crypto from 'crypto';
-import { User } from '../models/userModel.js';
+import { User , CollectionCrewMember } from '../models/userModel.js';
 import { Route } from '../models/routeModels.js';
 import Wastebin from '../models/wastebinModel.js';
 import { AccountStatusEnum } from '../models/enums.js';
@@ -142,11 +142,19 @@ const updatePickupRequest = asyncHandler(async (req, res) => {
     });
 });
 
+
+
+const getAllCrewMembers = asyncHandler(async (req, res) => {
+    const crew = await CollectionCrewMember.find().select('-password');
+    res.json(crew);
+});
+
 export { 
     getUsers, 
     updateUserStatus, 
     createRoute, 
     getWasteLevelReport,
     getAllPickupRequests,
-    updatePickupRequest
+    updatePickupRequest,
+    getAllCrewMembers
 };

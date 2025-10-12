@@ -71,7 +71,6 @@ const Resident = User.discriminator('Resident', new Schema({
         type: Number, 
         default: 0 
     },
-    // Reference to Wastebin is managed on the Wastebin side (owner)
 }));
 
 // 3. CollectionCrewMember
@@ -90,7 +89,7 @@ const CollectionCrewMember = User.discriminator('CollectionCrewMember', new Sche
     },
     address: { 
         type: String ,
-        required: true 
+        required: true // <--- REQUIRED 
     }
 }));
 

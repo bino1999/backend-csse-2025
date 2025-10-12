@@ -6,7 +6,8 @@ import {
     createRoute, 
     getWasteLevelReport,
     getAllPickupRequests,
-    updatePickupRequest
+    updatePickupRequest,
+    getAllCrewMembers
 } from '../controllers/adminController.js';
 
 const router = express.Router();
@@ -47,5 +48,7 @@ router.route('/pickup-requests')
 // @desc  Update a special pickup request
 router.route('/pickup-requests/:id')
     .put(adminProtect, updatePickupRequest);
+
+router.get('/crew-members', getAllCrewMembers)    
 
 export default router;

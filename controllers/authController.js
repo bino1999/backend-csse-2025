@@ -81,7 +81,7 @@ const registerAdmin = asyncHandler(async (req, res) => {
 // @route   POST /api/auth/register-crew
 // @access  Public (should be restricted in production)
 const registerCrewMember = asyncHandler(async (req, res) => {
-    const { name, email, password, employeeId, contactNumber, vehicle } = req.body;
+    const { name, email, password, employeeId, contactNumber, vehicle,address } = req.body;
     const userExists = await User.findOne({ email });
     if (userExists) {
         res.status(400);
@@ -96,6 +96,7 @@ const registerCrewMember = asyncHandler(async (req, res) => {
         employeeId,
         contactNumber,
         vehicle,
+        address,
         role: 'CollectionCrewMember'
     });
     if (crew) {
@@ -104,6 +105,7 @@ const registerCrewMember = asyncHandler(async (req, res) => {
             name: crew.name,
             email: crew.email,
             role: crew.role,
+            address:crew.address,
             token: generateToken(crew._id),
         });
     } else {
