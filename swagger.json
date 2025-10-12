@@ -52,11 +52,12 @@
         "properties": {
           "_id": { "type": "string" },
           "requestId": { "type": "string" },
-          "requestType": { "type": "string" },
+          "requestType": { "type": "string", "enum": ["BULK", "E_WASTE"] },
           "description": { "type": "string" },
           "scheduledDate": { "type": "string", "format": "date-time" },
-          "status": { "type": "string" },
-          "resident": { "type": "string" }
+          "status": { "type": "string", "enum": ["PENDING", "APPROVED", "REJECTED", "SCHEDULED", "COLLECTED", "COMPLETED", "IN_PROGRESS"] },
+          "resident": { "type": "string" },
+          "assignedCrew": { "type": "string" }
         }
       },
       "AdminRegisterRequest": {
@@ -289,6 +290,57 @@
         "responses": {
           "201": { "description": "Crew member registered" },
           "400": { "description": "Validation error" }
+        }
+      }
+    },
+    "/crew/pickup-requests": {
+      "get": {
+        "tags": ["Crew"],
+        "summary": "Get all pickup requests assigned to the logged-in crew member",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "List of assigned pickup requests",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/PickupRequest" } }
+              }
+            }
+          },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" }
+        }
+      }
+    },
+    "/crew/pickup-requests/{id}/start": {
+      "put": {
+        "tags": ["Crew"],
+        "summary": "Start a pickup (set status to IN_PROGRESS)",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Pickup started" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Pickup request not found" }
+        }
+      }
+    },
+    "/crew/pickup-requests/{id}/complete": {
+      "put": {
+        "tags": ["Crew"],
+        "summary": "Complete a pickup (set status to COMPLETED)",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Pickup completed" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Pickup request not found" }
         }
       }
     }

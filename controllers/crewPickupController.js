@@ -22,7 +22,7 @@ const startPickup = asyncHandler(async (req, res) => {
         res.status(403);
         throw new Error('Not authorized for this pickup');
     }
-    request.status = 'SCHEDULED';
+    request.status = 'IN_PROGRESS';
     await request.save();
     res.json({ message: 'Pickup started', request });
 });
@@ -37,7 +37,7 @@ const completePickup = asyncHandler(async (req, res) => {
         res.status(403);
         throw new Error('Not authorized for this pickup');
     }
-    request.status = 'COLLECTED';
+    request.status = 'COMPLETED';
     await request.save();
     res.json({ message: 'Pickup completed', request });
 });

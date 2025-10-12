@@ -7,4 +7,6 @@ export const RequestStatusEnum = [
   "REJECTED",
   "SCHEDULED",
   "COLLECTED",
+  "IN_PROGRESS",
+  "COMPLETED",
 ];
