@@ -7,7 +7,7 @@ import PickupRequest from '../models/pickupRequestModel.js';
 const getAssignedPickups = asyncHandler(async (req, res) => {
     const pickups = await PickupRequest.find({
         assignedCrew: req.user._id,
-        status: { $nin: ['COLLECTED', 'REJECTED'] }
+        // status: { $nin: ['COLLECTED', 'REJECTED'] }
     }).populate('resident', 'name email address').sort({ scheduledDate: 1 });
     res.json(pickups);
 });

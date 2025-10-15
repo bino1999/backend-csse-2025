@@ -2,7 +2,8 @@ import express from 'express';
 import { protect, checkRole } from '../middleware/authMiddleware.js';
 import { 
     getResidentWastebins, 
-    schedulePickup 
+    schedulePickup,
+    getRequestedPickups 
 } from '../controllers/residentController.js';
 
 const router = express.Router();
@@ -21,5 +22,10 @@ router.route('/wastebins')
 // @desc  Schedule a new special waste collection request
 router.route('/requests')
     .post(residentProtect, schedulePickup); 
+
+router.route('/fetchPickups')
+    .get(residentProtect, getRequestedPickups);     
+
+    
 
 export default router;

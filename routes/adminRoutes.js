@@ -42,12 +42,16 @@ router.route('/reports/waste-levels')
 // @route GET /api/admin/pickup-requests
 // @desc  Get list of all special pickup requests
 router.route('/pickup-requests')
-    .get(adminProtect, getAllPickupRequests);
+    .get(getAllPickupRequests);
 
 // @route PUT /api/admin/pickup-requests/:id
 // @desc  Update a special pickup request
+
+// router.route('/pickup-requests/:id')
+//     .put(adminProtect, updatePickupRequest);
+
 router.route('/pickup-requests/:id')
-    .put(adminProtect, updatePickupRequest);
+    .put( updatePickupRequest);    
 
 router.get('/crew-members', getAllCrewMembers)    
 

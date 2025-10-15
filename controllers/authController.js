@@ -118,26 +118,33 @@ const registerCrewMember = asyncHandler(async (req, res) => {
 // @route   POST /api/auth/login
 // @access  Public
 const authUser = asyncHandler(async (req, res) => {
-    // Validation is handled by validationMiddleware.js
     const { email, password } = req.body;
-
-    // Find the user by email
     const user = await User.findOne({ email });
 
-    // Check password and account status
     if (user && (await user.matchPassword(password))) {
         if (user.accountStatus !== 'ACTIVE') {
             res.status(403);
             throw new Error(`Account is ${user.accountStatus}. Access denied.`);
         }
 
-        res.json({
+        // Build role-specific response
+        let userData = {
             _id: user._id,
             name: user.name,
             email: user.email,
-            role: user.role, 
+            role: user.role,
             token: generateToken(user._id),
-        });
+        };
+
+        if (user.role === 'Resident') {
+            userData.address = user.address;
+        } else if (user.role === 'CollectionCrewMember') {
+            userData.contactNumber = user.contactNumber;
+            userData.address = user.address;
+        }
+        // Administrator: no extra fields needed
+
+        res.json(userData);
     } else {
         res.status(401);
         throw new Error('Invalid email or password');

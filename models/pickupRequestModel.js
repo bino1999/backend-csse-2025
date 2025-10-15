@@ -12,9 +12,7 @@ const pickupRequestSchema = new mongoose.Schema(
     requestType: {
       // e.g., 'Bulky Item Collection'
       type: String,
-      enum: WasteTypeEnum.filter(
-        (type) => type === "BULK" || type === "E_WASTE"
-      ), // Only for bulky/special waste
+      enum: WasteTypeEnum,
       required: true,
     },
     description: {
@@ -44,6 +42,11 @@ const pickupRequestSchema = new mongoose.Schema(
       ref: "CollectionCrewMember",
       default: null,
     },
+    location: {
+      //
+      type: String,
+      required: true,
+    }
   },
   {
     timestamps: true,

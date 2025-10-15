@@ -22,7 +22,7 @@ const getResidentWastebins = asyncHandler(async (req, res) => {
 // @route   POST /api/resident/requests
 // @access  Private/Resident
 const schedulePickup = asyncHandler(async (req, res) => {
-    const { requestType, description, scheduledDate } = req.body;
+    const { requestType, description, scheduledDate ,location} = req.body;
     
     if (!requestType || !description || !scheduledDate) {
         res.status(400);
@@ -38,6 +38,7 @@ const schedulePickup = asyncHandler(async (req, res) => {
         scheduledDate: new Date(scheduledDate),
         resident: req.user._id, // Link to the logged-in Resident
         status: 'PENDING',
+        location
     });
 
     res.status(201).json({
@@ -46,7 +47,17 @@ const schedulePickup = asyncHandler(async (req, res) => {
     });
 });
 
+const getRequestedPickups = asyncHandler(async (req, res) => {
+    const pickups = await PickupRequest.find({
+        resident: req.user._id,
+    });
+    res.json(pickups);
+});
+
+
+
 export { 
     getResidentWastebins, 
-    schedulePickup 
+    schedulePickup ,
+    getRequestedPickups
 };
